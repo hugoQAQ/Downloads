@@ -8,7 +8,7 @@ from sklearn.preprocessing import StandardScaler, MinMaxScaler
 
 def process_data(raw_data, lags):
     """Process data
-    Reshape and split train\test data.
+    Reshape and split train\val data.
 
     # Arguments
         raw_data: String, name of .csv raw data file.

@@ -36,6 +36,27 @@ def train_model(model, X_train, y_train, config):
     df = pd.DataFrame.from_dict(hist.history)
     df.to_csv('model/GRU_loss.csv', encoding='utf-8', index=False)
 
+    # draw the loss curve of the training set and validation set
+    import matplotlib.pyplot as plt
+    
+    history_dict = hist.history
+    history_dict.keys()
+
+    loss_values = history_dict['loss']
+    val_loss_values = history_dict['val_loss']
+
+    epochs = range(1, len(loss_values) + 1)
+    plt.plot(epochs, loss_values, 'b',color = 'blue', label='Training loss')
+    plt.plot(epochs, val_loss_values, 'b',color='red', label='Validation loss')
+    plt.rc('font', size = 18)
+    plt.title('Training and validation loss')
+
+    plt.xlabel('Epochs')
+    plt.ylabel('Loss')
+    plt.legend()
+
+    plt.show()
+
 def main():
     
     lag = 4
