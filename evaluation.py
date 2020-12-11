@@ -86,4 +86,4 @@ def plot_results(y_true, y_preds, names):
     fig.autofmt_xdate()
     plt.show()
 
-    plt.savefig('images/prediction plot')
+    plt.savefig('images/prediction plot',dpi=200, bbox_inches='tight')

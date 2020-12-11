@@ -43,6 +43,5 @@ def train_model(model, X_train, y_train, name,config):
     plt.xlabel('Epochs')
     plt.ylabel('Loss')
     plt.legend()
+    plt.savefig('images/'+name+'_Training_validation loss plot',dpi=200, bbox_inches='tight')
     plt.show()
-
-    plt.savefig('images/'+name+'Training/validation loss plot')

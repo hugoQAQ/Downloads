@@ -4,7 +4,7 @@ from data.data import process_data
 from evaluation import MAPE, eva_regress, plot_results
 from model.model import get_lstm, get_gru
 from train import train_model
-from tensorflow.keras.models import Model
+from tensorflow.keras.models import Model,load_model
 import matplotlib.pyplot as plt
 
 
@@ -26,18 +26,18 @@ class predict_volume():
 
     def model_evaluation(self):
         y_preds = []
-        lstm = load_model('model/lstm.h5')
-        gru = load_model('model/gru.h5')
+        lstm = load_model('model/LSTM.h5')
+        gru = load_model('model/GRU.h5')
         models = [lstm, gru]
         names = ['LSTM', 'GRU']
         for name, model in zip(names, models):
             file = 'images/' + name + '.png'
             # plot_model(model, to_file=file, show_shapes=True) # pydotplus.graphviz.InvocationException: GraphViz's executables not found
-            predicted = model.predict(X_test)
-            predicted = scaler.inverse_transform(predicted.reshape(-1, 1)).reshape(1, -1)[0]
+            predicted = model.predict(self.X_test)
+            predicted = self.scaler.inverse_transform(predicted.reshape(-1, 1)).reshape(1, -1)[0]
             y_preds.append(predicted[:120])
             print(name)
-            eva_regress(y_test, predicted)
+            eva_regress(self.y_test, predicted)
 
         plot_results(y_test[: 120], y_preds, names)
 
