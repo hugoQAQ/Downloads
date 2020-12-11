@@ -5,13 +5,13 @@ import numpy as np
 import pandas as pd
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
 
-
-def process_data(raw_data, lags):
+def process_data(raw_data,location,lags):
     """Process data
-    Reshape and split train\val data.
+    Reshape and split train\test data.
 
     # Arguments
         raw_data: String, name of .csv raw data file.
+        location: String, name of street.
         lags: integer, time lag.
     # Returns
         X_train: ndarray.
@@ -22,54 +22,50 @@ def process_data(raw_data, lags):
     """
 
     # Data processing
-    # df = pd.read_csv("/kaggle/input/radar-traffic-data/Radar_Traffic_Counts.csv")
     df = pd.read_csv(raw_data, encoding='utf-8').fillna(0)
-    df=df.dropna()
-    df_copy=df.copy()
-    df['datetime']=pd.to_datetime(df_copy[['Year','Month','Day','Hour','Minute']])
-    df_blk=df[df['location_name']=='3201 BLK S LAMAR BLVD (BROKEN SPOKE)'].sort_values(by='datetime').copy()
-    
+    df['datetime']=pd.to_datetime(df[['Year','Month','Day','Hour','Minute']].copy())
+    df['location_name']=df['location_name'].str.lstrip()
+    df_street=df[(df['location_name']==location)].sort_values(by='datetime').copy()
+
     # Training set
-    df_blk_1836=df_blk[(df_blk['Year']==2018)&(df_blk['Month']<7)].copy()
-    print(df_blk_1836['Time Bin'].unique())
+    df_street_1836=df_street[(df_street['Year']==2018)&(df_street['Month']<7)].copy()
 
     # sum of volume by time bin
-    grb_datetime_flow_sum=df_blk_1836.groupby('datetime')['Volume'].sum()
+    grb_datetime_flow_sum=df_street_1836.groupby('datetime')['Volume'].sum()
     train=pd.DataFrame({'datetime':grb_datetime_flow_sum.index,'volume':grb_datetime_flow_sum})
-    print(train.head())
 
     # Normalization of training set
     from sklearn.preprocessing import StandardScaler, MinMaxScaler
     scaler = MinMaxScaler(feature_range=(0, 1)).fit(train['volume'].values.reshape(-1, 1))
     result=scaler.transform(train['volume'].values.reshape(-1, 1)).reshape(1, -1)[0]
-    print(result)
 
     train=[]
     for i in range(lags, len(result)):
         train.append(result[i - lags: i + 1])
     train = np.array(train)
-    print(train)
     np.random.shuffle(train)
     X_train = train[:, :-1]
     y_train = train[:, -1]
-    # X_train = np.reshape(X_train, (X_train.shape[0], X_train.shape[1], 1))
+    X_train = np.reshape(X_train, (X_train.shape[0], X_train.shape[1], 1))
 
-    df_blk_1807=df_blk[(df_blk['Year']==2018) & (df_blk['Month']==7)]
-    grb_datetime_flow_sum=df_blk_1807.groupby('datetime')['Volume'].sum()
+    #Test set
+    df_street_1807=df_street[(df_street['Year']==2018) & (df_street['Month']==7)]
+    grb_datetime_flow_sum=df_street_1807.groupby('datetime')['Volume'].sum()
     validation=pd.DataFrame({'datetime':grb_datetime_flow_sum.index,'volume':grb_datetime_flow_sum})
 
-    # Normalization of training set
+    # Normalization of test set
     from sklearn.preprocessing import StandardScaler, MinMaxScaler
     scaler = MinMaxScaler(feature_range=(0, 1)).fit(validation['volume'].values.reshape(-1, 1))
     result=scaler.transform(validation['volume'].values.reshape(-1, 1)).reshape(1, -1)[0]
-    print(result)
-    val=[]
-    for i in range(lags, len(result)):
-        val.append(result[i - lags: i + 1])
-    val = np.array(val)
-    np.random.shuffle(val)
-    X_val = val[:, :-1]
-    y_val = val[:, -1]
-    # X_val = np.reshape(X_val, (X_val.shape[0], X_val.shape[1], 1))
 
-    return X_train, y_train, X_val, y_val, scaler
+    test=[]
+    for i in range(lags, len(result)):
+        test.append(result[i - lags: i + 1])
+    test = np.array(test)
+    np.random.shuffle(test)
+    X_test = test[:, :-1]
+    y_test = test[:, -1]
+    X_test = np.reshape(X_test, (X_test.shape[0], X_test.shape[1], 1))
+    y_test = scaler.inverse_transform(y_test.reshape(-1, 1)).reshape(1, -1)[0]
+
+    return X_train, y_train, X_test, y_test, scaler
