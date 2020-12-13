@@ -84,6 +84,5 @@ def plot_results(y_true, y_preds, names):
     date_format = mpl.dates.DateFormatter("%H:%M")
     ax.xaxis.set_major_formatter(date_format)
     fig.autofmt_xdate()
-    plt.show()
-
     plt.savefig('images/prediction plot',dpi=200, bbox_inches='tight')
+    plt.show()
