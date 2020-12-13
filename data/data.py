@@ -16,8 +16,8 @@ def process_data(raw_data,location,lags):
     # Returns
         X_train: ndarray.
         y_train: ndarray.
-        X_val: ndarray.
-        y_val: ndarray.
+        X_test: ndarray.
+        y_test: ndarray.
         scaler: StandardScaler.
     """
 
