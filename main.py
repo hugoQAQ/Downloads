@@ -39,7 +39,7 @@ class predict_volume():
             print(name)
             eva_regress(self.y_test, predicted)
 
-        plot_results(y_test[: 120], y_preds, names)
+        plot_results(self.y_test[: 120], y_preds, names)
 
 def MAIN():
     lags = 4
