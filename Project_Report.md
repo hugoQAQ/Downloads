@@ -1,6 +1,6 @@
 # Introduction
 
-This report is about our final project for the course Machine Learning [1]. We worked in a team of two members. Our task is to Build a deep learning model that predicts the traffic volume. The data that should be analyzed is called “Radar Traffic Data”, which can be download in Kaggle [2]. The traffic data is collected from radar sensors deployed by the city of Austin.
+This report is about our final project for the course Machine Learning [1]. We worked in a team of two members. Our task is to build a deep learning model that predicts the traffic volume. The data that should be analyzed is called “Radar Traffic Data”, which can be download in Kaggle [2]. The traffic data is collected from radar sensors deployed by the city of Austin.
 
 This report is developed by the following parts: data analysis and processing, model construction and parameter setting, experimental process and conclusions.
 
@@ -17,7 +17,7 @@ The following is our work plan:
 
 In order to facilitate data visualization and data analysis, we use the shareable notebook of the kaggle platform for data analysis and processing.
 
-## 2.1 Data description:
+## 2.1 Data description
 
 Traffic data collected from the several Wavetronix radar sensors deployed by the City of Austin. Dataset is augmented with geo coordinates from sensor location dataset.
 
@@ -50,7 +50,7 @@ After removing some leading whitespaces on location_name column, we identified 1
 The following is a map-based visualization (see the codes in annexes 1):
 
 ![image-20201214172458320](https://github.com/LinxueLAI/FinalProject/blob/main/images/map.png)
-***Figure 5**: location visualisation*
+***Figure 5**: location visualization*
 
 We use the process_data method in the code data/data.py for data processing:
 
@@ -141,7 +141,7 @@ The divided data set still has timing characteristics in the arrangement order. 
 
 # 3 Models 
 
-According to data analysis results, on a certain location, traffic flow has a significantly periodic nature. So we decided to simplifying the problem by only considering time information and traffic flow. 
+According to data analysis results, on a certain location, traffic flow has a significantly periodic nature. So we decided to simplify the problem by only considering time information and traffic flow. 
 
 Recurrent neural networks are a generalization of feedforward neural networks, which have been devised for handling temporal and predictive problems. We built two types of recurrent neural networks: an LSTM model and a GRU model. Each model was trained and tested traffic flow data at a certain location. At the end, the performances of two models were compared.
 
@@ -163,7 +163,7 @@ The advantage of an LSTM cell compared to a common recurrent unit is its cell me
 
 In this case, we choose to implement a two hidden layer LSTM model. The intuition is that the deep LSTM network is able to learn the temporal dependencies of the aggregate traffic flow: the LSTM unit of each layer extract a fixed number of features which are passed to the next layer. The depth of the network is to increase the accuracy of the prediction. In this case, we consider that two-layer LSTM is adequate. 
 
-Then the LSTM layer is accompanied by a Dropout layer, which help to prevent overfitting by ignoring randomly selected neruons during training, and hence reduces the sensitivity to the specific weights of individual neurons. 20% is set as a good compromise between retaining model accuracy and preventing overfitting.
+Then the LSTM layer is accompanied by a Dropout layer, which help to prevent overfitting by ignoring randomly selected neurons during training, and hence reduces the sensitivity to the specific weights of individual neurons. 20% is set as a good compromise between retaining model accuracy and preventing overfitting.
 
 In the data process step, we calculated the aggregate traffic flow measurements for every 15 minutes. Then a time lag of one hour was set for dataset preparation. In other words, we used a input which is aggregate traffic flow measurements during one hour and an output that represents traffic flow volume after one hour to train the model.
 ![lstm_structure](https://github.com/LinxueLAI/FinalProject/blob/main/images/LSTM_structure.png)
@@ -187,7 +187,7 @@ We evaluate the prediction error by serval assessment indicator as shown in the 
 
 | **Metrics** | **MAE** | **MSE** | **RMSE** | **MAPE** | **R2** | **Explained variance score** |
 | ----------- | ------- | ------- | -------- | -------- | ------ | ---------------------------- |
-| LSTM        | 25.78   | 1289.14 | 35.90    | 12.22%   | 0.9670 | 0.9670                       |
+| LSTM        | 27.58   | 1289.14 | 35.90    | 12.66%   | 0.9636 | 0.9654                       |
 
 ***Table 2**: LSTM Model assessment*
 
@@ -327,7 +327,7 @@ Values of the indicators：
 
 | **Metrics** | **MAE** | **MSE** | **RMSE** | **MAPE** | **R2** | **Explained variance score** |
 | ----------- | ------- | ------- | -------- | -------- | ------ | ---------------------------- |
-| GRU         | 26.00   | 1284.67 | 35.84    | 13.55%   | 0.9671 | 0.9671                       |
+| GRU         | 26.00   | 1284.67 | 35.84    | 12.25%   | 0.9671 | 0.9671                       |
 
 
 
