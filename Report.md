@@ -105,7 +105,7 @@ The divided data set still has timing characteristics in the arrangement order. 
 
  The processing of the test set is similar to the above process:
 
-```
+```python
 #Test set
 
   df_street_1807=df_street[(df_street['Year']==2018) & (df_street['Month']==7)]
@@ -368,7 +368,7 @@ In future work, the influence of location factors can be considered. Combining t
 [4] Trinh H D, Giupponi L, Dini P. Mobile traffic prediction from raw data using LSTM networks[C]//2018 IEEE 29th Annual International Symposium on Personal, Indoor and Mobile Radio Communications (PIMRC). IEEE, 2018: 1827-1832.
 
 # Annex 1: map visualization
-```
+```python
 import folium
 import pandas as pd
 
@@ -413,7 +413,7 @@ v_map.add_child(index)
 
 # Annex 2 main.py
 
-```
+```python
 import numpy as np
 import pandas as pd
 from data.data import process_data
