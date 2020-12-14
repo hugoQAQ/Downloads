@@ -52,12 +52,8 @@ After removing some leading whitespaces on location_name column, we identified 1
 The following is a map-based visualization (see the codes in annexes 1):
 
 ![image-20201214172458320](https://github.com/LinxueLAI/FinalProject/blob/main/images/map.png)
-<<<<<<< HEAD:Project_Report.md
-***Figure 5**: location visualization*
-=======
 
-***Figure 5**: location visualisation*
->>>>>>> ef141703dc8a66d8af9b8b4f34ad75dba494cc46:Report.md
+***Figure 5**: location visualization*
 
 We use the process_data method in the code data/data.py for data processing:
 
