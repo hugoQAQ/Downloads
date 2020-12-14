@@ -1,4 +1,4 @@
-# Introduction
+# 1.Introduction
 
 This report is about our final project for the course Machine Learning [1]. We worked in a team of two members. Our task is to build a deep learning model that predicts the traffic volume. The data that should be analyzed is called “Radar Traffic Data”, which can be download in Kaggle [2]. The traffic data is collected from radar sensors deployed by the city of Austin.
 
@@ -13,7 +13,7 @@ The following is our work plan:
 | 02/12/2020 - 08/12/2020 | - (Weicheng HE) Construction of model LSTM and improve model.<br/>- (Linxue LAI) Construction of model GRU and improve model. |
 | 09/12/2020 - 13/12/2020 | Improve codes, summarize experimental results, write report  |
 
-# 2 Data analysis and processing
+# 2.Data analysis and processing
 
 In order to facilitate data visualization and data analysis, we use the shareable notebook of the kaggle platform for data analysis and processing.
 
@@ -38,6 +38,7 @@ In order to simplify the problem and make it easier to understand, we first cons
 ![image-20201214172314523](https://github.com/LinxueLAI/FinalProject/blob/main/images/location1.png)
 
 ***Figure 2**: location 1： 3201 BLK S LAMAR BLVD (BROKEN SPOKE)*
+
 ![image-20201214172314523](https://github.com/LinxueLAI/FinalProject/blob/main/images/location2.png)
 
 ***Figure 3**: location 2：100 BLK S CONGRESS AVE (Congress Bridge)*
@@ -45,12 +46,18 @@ In order to simplify the problem and make it easier to understand, we first cons
 After removing some leading whitespaces on location_name column, we identified 18 different locations in total.  
 
 ![image-20201214172443907](https://github.com/LinxueLAI/FinalProject/blob/main/images/location_names.png)
+
 ***Figure 4**: Location names*
 
 The following is a map-based visualization (see the codes in annexes 1):
 
 ![image-20201214172458320](https://github.com/LinxueLAI/FinalProject/blob/main/images/map.png)
+<<<<<<< HEAD:Project_Report.md
 ***Figure 5**: location visualization*
+=======
+
+***Figure 5**: location visualisation*
+>>>>>>> ef141703dc8a66d8af9b8b4f34ad75dba494cc46:Report.md
 
 We use the process_data method in the code data/data.py for data processing:
 
@@ -102,7 +109,7 @@ The divided data set still has timing characteristics in the arrangement order. 
 
  The processing of the test set is similar to the above process:
 
-```
+```python
 #Test set
 
   df_street_1807=df_street[(df_street['Year']==2018) & (df_street['Month']==7)]
@@ -139,7 +146,7 @@ The divided data set still has timing characteristics in the arrangement order. 
 
 ```
 
-# 3 Models 
+# 3.Models 
 
 According to data analysis results, on a certain location, traffic flow has a significantly periodic nature. So we decided to simplify the problem by only considering time information and traffic flow. 
 
@@ -166,13 +173,16 @@ In this case, we choose to implement a two hidden layer LSTM model. The intuitio
 Then the LSTM layer is accompanied by a Dropout layer, which help to prevent overfitting by ignoring randomly selected neurons during training, and hence reduces the sensitivity to the specific weights of individual neurons. 20% is set as a good compromise between retaining model accuracy and preventing overfitting.
 
 In the data process step, we calculated the aggregate traffic flow measurements for every 15 minutes. Then a time lag of one hour was set for dataset preparation. In other words, we used a input which is aggregate traffic flow measurements during one hour and an output that represents traffic flow volume after one hour to train the model.
+
 ![lstm_structure](https://github.com/LinxueLAI/FinalProject/blob/main/images/LSTM_structure.png)
 
 ***Figure 7**: 2 hidden-layer LSTM model structure*
 
 The implementation of this LSTM model is done in Python, using Keras and Tensorflow, as backend. The chosen hypreparameters are reported in Table 1. They were tuned in order to get a good tradeoff between the prediction accuracy and the training time.
 
-| Initial Learning Rate      | 0.001   |
+| **Hyperparameters**  | **Value**   |
+| ---------------------------| ------- |
+| **Initial Learning Rate**  | 0.001   |
 | **Num. of Epochs**         | 600     |
 | **LSTM layer neuron size** | 64, 64  |
 | **Batch size**             | 32      |
@@ -198,13 +208,14 @@ We evaluate the prediction error by serval assessment indicator as shown in the 
 GRU (Gate Recurrent Unit) is a type of Recurrent Neural Network (RNN). Like LSTM (Long-Short Term Memory), it is also proposed to solve problems such as long-term memory and gradients in back propagation.
 
 In many cases, GRU and LSTM are almost the same in actual performance, so why do we use the newcomer GRU (proposed in 2014).
-> We choose to use Gated Recurrent Unit (GRU) (Cho et al., 2014) in our experiment since it performs similarly to LSTM (Hochreiter & Schmidhuber, 1997) but is comutationallly cheaper.        ---- R-NET: MACHINE READING COMPREHENSION WITH SELF-MATCHING NETWORKS（2017）
+> We choose to use Gated Recurrent Unit (GRU) (Cho et al., 2014) in our experiment since it performs similarly to LSTM (Hochreiter & Schmidhuber, 1997) but is comutationallly cheaper. (R-NET: MACHINE READING COMPREHENSION WITH SELF-MATCHING NETWORKS(2017))      
 
 ### 3.2.2 Structure of GRU model
 
 The input and output structure of GRU is the same as that of ordinary RNN. There is a current input xt and a hidden state ht-1 passed down from the previous node. This hidden state contains information about the previous node. Combining xt and ht-1, GRU will get the output yt of the current hidden node and the hidden state ht passed to the next node.
 
 ![GRU](https://github.com/LinxueLAI/FinalProject/blob/main/images/GRU.png)
+
 ***Figure 8**: (a) GRU input and output structure (b) GRU network schematic diagram*
 
 We use a 2-hidden layer GRU structure, as shown below:
@@ -345,12 +356,121 @@ As shown in the Figure 5 below, the two types of RNN model have very similar per
 
  
 
-# 4 Conclusion 
+# 4.Conclusion 
 
 In this project we propose a LSTM model and a GRU model for traffic flow prediction. We compared the predictions of the LSTM and GRU models and found that in our research, the GRU NN model performed slightly better than the LSTM NN model. On average, the MAE and MSE of the GRU NN model are smaller than those of the LSTM NN model. 
 
 In future work, the influence of location factors can be considered. Combining the influence and relation of different locations and the factor of time, we can consider using methods such as Spatial-Temporal Graph Convolutional Networks for traffic flow prediction.
 
+# References
+[1] course link: https://members.loria.fr/CCerisara/#courses/machine_learning/
 
+[2] data link: https://www.kaggle.com/vinayshanbhag/radar-traffic-data?select=Radar_Traffic_Counts.csv
+
+[3] Find codes of this project in github: https://github.com/LinxueLAI/FinalProject
+
+[4] Trinh H D, Giupponi L, Dini P. Mobile traffic prediction from raw data using LSTM networks[C]//2018 IEEE 29th Annual International Symposium on Personal, Indoor and Mobile Radio Communications (PIMRC). IEEE, 2018: 1827-1832.
+
+# Annex 1: map visualization
+```python
+import folium
+import pandas as pd
+
+df = pd.read_csv("/kaggle/input/radar-traffic-data/Radar_Traffic_Counts.csv")
+
+# define the world map
+world_map = folium.Map()
+
+# display world map
+world_map
+lat_lon = pd.DataFrame(df,columns=['location_name','location_latitude','location_longitude'])
+lat_lon.drop_duplicates(['location_name','location_latitude','location_longitude'], keep='first', inplace=True)
+print(lat_lon)
+lat_lon.drop_duplicates(['location_latitude','location_longitude'], keep='first', inplace=True)
+print(lat_lon)
+print(len(lat_lon))
+
+# get the data in map
+limit = len(lat_lon)
+data = lat_lon.iloc[0:limit, :]
+latitude,longitude = lat_lon['location_latitude'][0],lat_lon['location_longitude'][0]
+# Instantiate a feature group in the dataframe
+index = folium.map.FeatureGroup()
+
+# Loop through the data and add each to the feature group
+for lat, lng, in zip(lat_lon.location_latitude, lat_lon.location_longitude):
+    index.add_child(
+        folium.CircleMarker(
+            [lat, lng],
+            radius=7, # define how big you want the circle markers to be
+            color='yellow',
+            fill=True,
+            fill_color='red',
+            fill_opacity=0.4
+        )
+    )
+
+# Add to map
+v_map = folium.Map(location=[latitude, longitude], zoom_start=12)
+v_map.add_child(index)
+```
+
+# Annex 2 main.py
+
+```python
+import numpy as np
+import pandas as pd
+from data.data import process_data
+from evaluation import MAPE, eva_regress, plot_results
+from model.model import get_lstm, get_gru
+from train import train_model
+from tensorflow.keras.models import Model,load_model
+import matplotlib.pyplot as plt
+
+class predict_volume():
+    def __init__(self,raw_data,location,units,lags,config):
+        self.raw_data=raw_data
+        self.location=location
+        self.units=units
+        self.lags=lags
+        self.config=config
+        self.X_train, self.y_train, self.X_test, self.y_test, self.scaler = process_data(self.raw_data,self.location,self.lags)
+
+    def training(self):
+        gru_model= get_gru(self.units)
+        train_model(gru_model, self.X_train, self.y_train, 'GRU', self.config)
+        lstm_model= get_lstm(self.units)
+        train_model(lstm_model, self.X_train, self.y_train, 'LSTM', self.config)
+
+    def model_evaluation(self):
+        y_preds = []
+        lstm = load_model('model/LSTM.h5')
+        gru = load_model('model/GRU.h5')
+        models = [lstm, gru]
+        names = ['LSTM', 'GRU']
+        for name, model in zip(names, models):
+            file = 'images/' + name + '.png'
+            # plot_model(model, to_file=file, show_shapes=True) # pydotplus.graphviz.InvocationException: GraphViz's executables not found
+            predicted = model.predict(self.X_test)
+            predicted = self.scaler.inverse_transform(predicted.reshape(-1, 1)).reshape(1, -1)[0]
+            y_preds.append(predicted[:120])
+            print(name)
+            eva_regress(self.y_test, predicted)
+
+        plot_results(self.y_test[: 120], y_preds, names)
+
+def MAIN():
+    lags = 4
+    config = {"batch": 256, "epochs": 600}
+    raw_data = 'data/Radar_Traffic_Counts.csv'
+    location='100 BLK S CONGRESS AVE (Congress Bridge)'
+    units=[lags,64,64,1]
+    pv=predict_volume(raw_data,location,units,lags,config)
+    pv.training()
+    pv.model_evaluation()
+
+if __name__ == '__main__':
+    MAIN()
+```
 
  
