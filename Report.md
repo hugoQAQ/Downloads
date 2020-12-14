@@ -23,7 +23,9 @@ Traffic data collected from the several Wavetronix radar sensors deployed by the
 
 The following is an overview of some of the data:
 
-![image-20201214172136439](/Users/iampagehe/Library/Application Support/typora-user-images/image-20201214172136439.png)
+![image-20201214172136439](https://github.com/LinxueLAI/FinalProject/blob/main/images/overview.png)
+
+***Figure 1**: Overview of dataset*
 
 ## 2.2 Exploratory data analysis
 
@@ -33,20 +35,22 @@ As traffic flow data has obvious periodic change characteristics, we consider us
 
 In order to simplify the problem and make it easier to understand, we first consider the changes of traffic volume at a single location over time. By looking at the data of a certain location in a certain period of time, we found that the data has an obvious cycle nature of daily changes. For example:
 
-![image-20201214172314523](/Users/iampagehe/Library/Application Support/typora-user-images/image-20201214172314523.png)
+![image-20201214172314523](https://github.com/LinxueLAI/FinalProject/blob/main/images/location1.png)
 
+***Figure 2**: location 1： 3201 BLK S LAMAR BLVD (BROKEN SPOKE)*
+![image-20201214172314523](https://github.com/LinxueLAI/FinalProject/blob/main/images/location2.png)
 
- location 1： 3201 BLK S LAMAR BLVD (BROKEN SPOKE)
-
-location 2：100 BLK S CONGRESS AVE (Congress Bridge)
+***Figure 3**: location 2：100 BLK S CONGRESS AVE (Congress Bridge)*
 
 After removing some leading whitespaces on location_name column, we identified 18 different locations in total.  
 
-![image-20201214172443907](/Users/iampagehe/Library/Application Support/typora-user-images/image-20201214172443907.png)
+![image-20201214172443907](https://github.com/LinxueLAI/FinalProject/blob/main/images/location_names.png)
+***Figure 4**: Location names*
 
 The following is a map-based visualization (see the codes in annexes 1):
 
-![image-20201214172458320](/Users/iampagehe/Library/Application Support/typora-user-images/image-20201214172458320.png)
+![image-20201214172458320](https://github.com/LinxueLAI/FinalProject/blob/main/images/map.png)
+***Figure 5**: location visualisation*
 
 We use the process_data method in the code data/data.py for data processing:
 
@@ -153,31 +157,29 @@ The capability of learning long-term dependencies is due to the structure of the
 
 The advantage of an LSTM cell compared to a common recurrent unit is its cell memory unit. The cell vector has the ability to encapsulate the notion of forgetting part of its previously stored memory, as well as to add part of the new information. 
 
+![lstm](https://github.com/LinxueLAI/FinalProject/blob/main/images/LSTM.png)
 
-
-Figure 1: LSTM network schematic diagram
-
- 
+***Figure 6**: LSTM network schematic diagram*
 
 In this case, we choose to implement a two hidden layer LSTM model. The intuition is that the deep LSTM network is able to learn the temporal dependencies of the aggregate traffic flow: the LSTM unit of each layer extract a fixed number of features which are passed to the next layer. The depth of the network is to increase the accuracy of the prediction. In this case, we consider that two-layer LSTM is adequate. 
 
 Then the LSTM layer is accompanied by a Dropout layer, which help to prevent overfitting by ignoring randomly selected neruons during training, and hence reduces the sensitivity to the specific weights of individual neurons. 20% is set as a good compromise between retaining model accuracy and preventing overfitting.
 
 In the data process step, we calculated the aggregate traffic flow measurements for every 15 minutes. Then a time lag of one hour was set for dataset preparation. In other words, we used a input which is aggregate traffic flow measurements during one hour and an output that represents traffic flow volume after one hour to train the model.
+![lstm_structure](https://github.com/LinxueLAI/FinalProject/blob/main/images/LSTM_structure.png)
 
-Figure 2: 2 hidden-layer LSTM model structure
+***Figure 7**: 2 hidden-layer LSTM model structure*
 
 The implementation of this LSTM model is done in Python, using Keras and Tensorflow, as backend. The chosen hypreparameters are reported in Table 1. They were tuned in order to get a good tradeoff between the prediction accuracy and the training time.
 
-| **Initial Learning Rate**  | 0.001   |
-| -------------------------- | ------- |
+| Initial Learning Rate      | 0.001   |
 | **Num. of Epochs**         | 600     |
 | **LSTM layer neuron size** | 64, 64  |
 | **Batch size**             | 32      |
 | **Optimization Algorithm** | rmsprop |
 | **Loss Function**          | MSE     |
 
-Table 1: Traing Hyperparameters
+***Table 1**: Traing Hyperparameters*
 
 ### 3.1.3 Results of LSTM model
 
@@ -187,7 +189,7 @@ We evaluate the prediction error by serval assessment indicator as shown in the 
 | ----------- | ------- | ------- | -------- | -------- | ------ | ---------------------------- |
 | LSTM        | 25.78   | 1289.14 | 35.90    | 12.22%   | 0.9670 | 0.9670                       |
 
-Table 2: LSTM Model assessment
+***Table 2**: LSTM Model assessment*
 
 ## 3.2 GRU
 
@@ -196,22 +198,20 @@ Table 2: LSTM Model assessment
 GRU (Gate Recurrent Unit) is a type of Recurrent Neural Network (RNN). Like LSTM (Long-Short Term Memory), it is also proposed to solve problems such as long-term memory and gradients in back propagation.
 
 In many cases, GRU and LSTM are almost the same in actual performance, so why do we use the newcomer GRU (proposed in 2014).
-
-Figure 1 below quotes a passage from the paper to illustrate the advantages of GRU.  *Figure 1: R-NET: MACHINE READING COMPREHENSION WITH SELF-MATCHING NETWORKS**（**2017**）*
+> We choose to use Gated Recurrent Unit (GRU) (Cho et al., 2014) in our experiment since it performs similarly to LSTM (Hochreiter & Schmidhuber, 1997) but is comutationallly cheaper.        ---- R-NET: MACHINE READING COMPREHENSION WITH SELF-MATCHING NETWORKS（2017）
 
 ### 3.2.2 Structure of GRU model
 
 The input and output structure of GRU is the same as that of ordinary RNN. There is a current input xt and a hidden state ht-1 passed down from the previous node. This hidden state contains information about the previous node. Combining xt and ht-1, GRU will get the output yt of the current hidden node and the hidden state ht passed to the next node.
 
-   
-
-*Figure* *3**: (a) GRU input and output structure (b) GRU network schematic diagram*
+![GRU](https://github.com/LinxueLAI/FinalProject/blob/main/images/GRU.png)
+***Figure 8**: (a) GRU input and output structure (b) GRU network schematic diagram*
 
 We use a 2-hidden layer GRU structure, as shown below:
 
- 
+![GRU](https://github.com/LinxueLAI/FinalProject/blob/main/images/GRU_structure.png)
 
-*Figure* *4* *2-hidden layer GRU structure*
+***Figure 9**: 2-hidden layer GRU structure*
 
 The model implementation code is as follows:
 
@@ -331,7 +331,7 @@ Values of the indicators：
 
 
 
-Table 3: GRU Model assessment
+***Table 3**: GRU Model assessment*
 
  
 
@@ -340,8 +340,8 @@ Table 3: GRU Model assessment
 As shown in the Figure 5 below, the two types of RNN model have very similar performance. Both of them can achieve an accurate enough prediction results on traffic flow volume. By looking at the different model assessment indicators, we can get a more precise comparison. The two models have almost the same R squared value: around 0.967, which means 96.7% of the variance for the prediction target can be explained by the predictors in the deep learning model. In addition, GRU has a slightly lower MAPE, indicating that GRU shows a little better performance considering the percentage error.
 
  
-
-*Figure* *5* *prediction plot of two models*
+![result](https://github.com/LinxueLAI/FinalProject/blob/main/images/prediction%20plot.png)
+***Figure 10**: prediction plot of two models*
 
  
 
