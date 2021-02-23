@@ -1,5 +1,5 @@
-# FinalProject
-A Final Project for ML
+# Final project for Machine Learning course
+Project for Machine Learning course of Master in Big Data & Data Science at Mines Nancy
 ## Data description
 Traffic data collected from the several Wavetronix radar sensors deployed by the City of Austin. Dataset is augmented with geo coordinates from sensor location dataset.
 ## Environment configuration
